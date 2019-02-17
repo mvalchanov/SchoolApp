@@ -1,30 +1,29 @@
 ﻿namespace SchoolApp.Models
 {
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
 
     public class User
     {
         public User()
         {
-            this.Groups = new HashSet<Group>();
+            this.Groups = new HashSet<UserGroup>();
         }
 
         public int UserId { get; set; }
-
-        [Required]
+        
+        public string Username { get; set; }
+        
         public string FirstName { get; set; }
-
-        [Required]
+        public string MiddleName { get; set; }
+        
         public string LastName { get; set; }
-
-        [Required]
-        [UIHint("password")]
+        
         public string Password { get; set; }
-
-        [Required]
+        
         public bool IsTeacher { get; set; }
 
-        public virtual ICollection<Group> Groups { get; set; }
+        public string ReturnUrl { get; set; } = "/";
+
+        public virtual ICollection<UserGroup> Groups { get; set; }
     }
 }

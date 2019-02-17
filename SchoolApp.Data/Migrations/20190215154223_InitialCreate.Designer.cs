@@ -3,11 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using SchoolApp.Data;
 
 namespace SchoolApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190213140124_InitialCreate")]
+    [Migration("20190215154223_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,14 +26,9 @@ namespace SchoolApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<int>("UserId");
+                    b.Property<string>("Name");
 
                     b.HasKey("GroupId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Groups");
                 });
@@ -42,24 +39,45 @@ namespace SchoolApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
                     b.Property<bool>("IsTeacher");
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
+                    b.Property<string>("LastName");
 
-                    b.Property<string>("Password")
-                        .IsRequired();
+                    b.Property<string>("Password");
+
+                    b.Property<string>("ReturnUrl");
+
+                    b.Property<string>("Username");
 
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SchoolApp.Models.Group", b =>
+            modelBuilder.Entity("SchoolApp.Models.UserGroup", b =>
                 {
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<int>("Id");
+
+                    b.HasKey("UserId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("UserGroup");
+                });
+
+            modelBuilder.Entity("SchoolApp.Models.UserGroup", b =>
+                {
+                    b.HasOne("SchoolApp.Models.Group", "Group")
+                        .WithMany("Users")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("SchoolApp.Models.User", "User")
                         .WithMany("Groups")
                         .HasForeignKey("UserId")
