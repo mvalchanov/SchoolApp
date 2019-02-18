@@ -47,13 +47,13 @@
             if (dbUser != null)
             {
                 dbUser.FirstName = user.FirstName;
+                dbUser.MiddleName = user.MiddleName;
                 dbUser.LastName = user.LastName;
                 dbUser.IsTeacher = user.IsTeacher;
                 dbUser.Groups = user.Groups;
                 dbUser.ReturnUrl = user.ReturnUrl;
             }
+            this.context.SaveChanges();
         }
-
-       
     }
 }

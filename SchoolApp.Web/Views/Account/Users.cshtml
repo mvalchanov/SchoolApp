@@ -28,7 +28,7 @@
                     <td>@Model[i].User.FirstName </td>
                     <td>@Model[i].User.MiddleName </td>
                     <td>@Model[i].User.LastName </td>
-                    <td>@Model[i].User.IsTeacher </td>
+                    <td>@(Model[i].User.IsTeacher ? "Yes" : "No")</td>
                     @if (Model[i].Groups.Count > 0)
                     {
                         <td>@Model[i].Groups.Count </td>
