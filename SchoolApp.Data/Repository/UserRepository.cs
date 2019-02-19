@@ -2,6 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using SchoolApp.Models;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class UserRepository : IUserRepository
@@ -15,7 +16,9 @@
 
         public User GetById(int id)
         {
-            return context.Users.Find(id);
+            var users = context.Users.Include(u => u.Groups);
+            var user = users.FirstOrDefault(u => u.UserId == id);
+            return user;
         }
 
         public IQueryable<User> GetAll(bool includeGroups = false)
@@ -23,7 +26,8 @@
             var allUsers = context.Users;
             if (includeGroups)
             {
-                allUsers.Include(u => u.Groups).ToList();
+                allUsers
+                    .Include(u => u.Groups).ToList();
             }
             return allUsers.AsQueryable();
         }
@@ -47,7 +51,7 @@
             if (dbUser != null)
             {
                 dbUser.FirstName = user.FirstName;
-                dbUser.MiddleName = user.MiddleName;
+                dbUser.MidName = user.MidName;
                 dbUser.LastName = user.LastName;
                 dbUser.IsTeacher = user.IsTeacher;
                 dbUser.Groups = user.Groups;

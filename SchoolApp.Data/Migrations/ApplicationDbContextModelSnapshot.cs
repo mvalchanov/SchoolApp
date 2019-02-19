@@ -33,7 +33,7 @@ namespace SchoolApp.Data.Migrations
 
             modelBuilder.Entity("SchoolApp.Models.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -43,15 +43,17 @@ namespace SchoolApp.Data.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MidName");
 
                     b.Property<string>("Password");
 
                     b.Property<string>("ReturnUrl");
 
+                    b.Property<int>("UserId");
+
                     b.Property<string>("Username");
 
-                    b.HasKey("UserId");
+                    b.HasKey("ID");
 
                     b.ToTable("Users");
                 });

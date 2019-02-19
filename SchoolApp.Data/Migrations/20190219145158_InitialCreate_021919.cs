@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SchoolApp.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreate_021919 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,18 +24,20 @@ namespace SchoolApp.Data.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Username = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
+                    MidName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
+                    Username = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     IsTeacher = table.Column<bool>(nullable: false),
                     ReturnUrl = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,8 +45,7 @@ namespace SchoolApp.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    GroupId = table.Column<int>(nullable: false),
-                    Id = table.Column<int>(nullable: false)
+                    GroupId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,7 +60,7 @@ namespace SchoolApp.Data.Migrations
                         name: "FK_UserGroup_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 

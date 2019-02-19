@@ -1,0 +1,28 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "Create new Teacher";
+}
+
+<div class="col-3">
+    <form asp-action="Create" asp-controller="Teacher" method="post">
+        <div class="form-group ">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" class="form-control" type="text" />
+        </div>
+        <div class="form-group ">
+            <label asp-for="MidName"></label>
+            <input asp-for="MidName" class="form-control" type="text" />
+        </div>
+        <div class="form-group ">
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" class="form-control" type="text" />
+        </div>
+        <div class="form-group ">
+            <label asp-for="IsTeacher"></label>
+            <input asp-for="IsTeacher" class="form-check" type="checkbox" />
+        </div>
+        <button class="btn btn-primary" type="submit">Create</button>
+        <a class="btn btn-danger" asp-action="Index">Cancel</a>
+    </form>
+</div>

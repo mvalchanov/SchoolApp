@@ -9,8 +9,8 @@ using SchoolApp.Data;
 namespace SchoolApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190215154223_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190219145158_InitialCreate_021919")]
+    partial class InitialCreate_021919
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,7 @@ namespace SchoolApp.Data.Migrations
 
             modelBuilder.Entity("SchoolApp.Models.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -45,13 +45,17 @@ namespace SchoolApp.Data.Migrations
 
                     b.Property<string>("LastName");
 
+                    b.Property<string>("MidName");
+
                     b.Property<string>("Password");
 
                     b.Property<string>("ReturnUrl");
 
+                    b.Property<int>("UserId");
+
                     b.Property<string>("Username");
 
-                    b.HasKey("UserId");
+                    b.HasKey("ID");
 
                     b.ToTable("Users");
                 });
@@ -61,8 +65,6 @@ namespace SchoolApp.Data.Migrations
                     b.Property<int>("UserId");
 
                     b.Property<int>("GroupId");
-
-                    b.Property<int>("Id");
 
                     b.HasKey("UserId", "GroupId");
 

@@ -1,4 +1,4 @@
-﻿@model List<TeacherViewModel>
+﻿@model List<User>
 
 @{
     ViewData["Title"] = "Teachers";
@@ -23,24 +23,25 @@
             @for (int i = 0; i < Model.Count; i++)
             {
                 <tr>
-                    <td>@Model[i].Teacher.UserId </td>
-                    <td>@Model[i].Teacher.FirstName </td>
-                    <td>@Model[i].Teacher.MiddleName </td>
-                    <td>@Model[i].Teacher.LastName </td>
-                    @if (Model[i].Teacher.Groups.Count > 0)
-                    {
-                        <td>@Model[i].Teacher.Groups.Count </td>
-                    }
-                    else
-                    {
-                        <td>@Model[i].Teacher.Groups.Count </td>
-                    }
+                    <td>@Model[i].UserId </td>
+                    <td>@Model[i].FirstName </td>
+                    <td>@Model[i].MidName </td>
+                    <td>@Model[i].LastName </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@Model[i].Teacher.UserId" class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@Model[i].Teacher.UserId" class="btn btn-primary">Delete</a>
+                        @foreach (var group in Model[i].Groups)
+                        {
+                            @group.Group.Name <br />
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@Model[i].UserId" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@Model[i].UserId" class="btn btn-outline-danger">Delete</a>
+                        <a asp-action="Details" asp-route-id="@Model[i].UserId" class="btn btn-outline-info">Details</a>
                     </td>
                 </tr>
             }
+
+            <a asp-action="Create" class="btn btn-secondary">Create</a>
         </tbody>
     </table>
 </div>
