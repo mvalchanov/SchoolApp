@@ -2,18 +2,11 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    public class GroupController : Controller
+    public class StudentController : Controller
     {
         public IActionResult Index()
         {
-
             return View();
         }
-        public IActionResult Groups()
-        {
-
-            return View();
-        }
-
     }
 }

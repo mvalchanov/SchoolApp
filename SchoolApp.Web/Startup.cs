@@ -1,7 +1,7 @@
 ﻿namespace SchoolApp.Web
 {
+    using AutoMapper;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,6 @@
     using SchoolApp.Data;
     using SchoolApp.Data.Repository;
     using SchoolApp.Models;
-    using SchoolApp.Web.Controllers;
 
     public class Startup
     {
@@ -34,9 +33,10 @@
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddTransient<IGroupRepository, GroupRepository>();
+            services.AddAutoMapper();
+            services.AddScoped<ITeacherRepository, TeacherRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddTransient<ICourseRepository, CourseRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

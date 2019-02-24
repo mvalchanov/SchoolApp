@@ -1,13 +1,14 @@
 ﻿
 namespace SchoolApp.Models
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
     public class Student : Person
     {
-        [DataType(DataType.Date)]
-        public DateTime EnrollmentDate { get; set; }
-
+        public Student()
+        {
+            this.Courses = new HashSet<CourseStudents>();
+        }
+        public ICollection<CourseStudents> Courses { get; set; }
     }
 }

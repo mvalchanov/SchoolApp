@@ -1,4 +1,4 @@
-﻿@model List<User>
+﻿@model AllTeachersViewModel
 
 @{
     ViewData["Title"] = "Teachers";
@@ -11,37 +11,32 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Last Name</th>
+                <th>Full Name</th>
                 <th>Groups</th>
                 <th>Options</th>
             </tr>
         </thead>
         <tbody>
 
-            @for (int i = 0; i < Model.Count; i++)
+            @foreach (var teacher in Model.Teachers)
             {
                 <tr>
-                    <td>@Model[i].UserId </td>
-                    <td>@Model[i].FirstName </td>
-                    <td>@Model[i].MidName </td>
-                    <td>@Model[i].LastName </td>
+                    <td>@teacher.ID </td>
+                    <td>@teacher.FullName </td>
                     <td>
-                        @foreach (var group in Model[i].Groups)
+                        @foreach (var course in teacher.Courses)
                         {
-                            @group.Group.Name <br />
+                            @course.Name <br />
                         }
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@Model[i].UserId" class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@Model[i].UserId" class="btn btn-outline-danger">Delete</a>
-                        <a asp-action="Details" asp-route-id="@Model[i].UserId" class="btn btn-outline-info">Details</a>
+                        <a asp-action="Edit" asp-route-id="@teacher.ID" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@teacher.ID" class="btn btn-outline-danger">Delete</a>
+                        <a asp-action="Details" asp-route-id="@teacher.ID" class="btn btn-outline-info">Details</a>
                     </td>
                 </tr>
             }
-
-            <a asp-action="Create" class="btn btn-secondary">Create</a>
         </tbody>
     </table>
+    <a asp-action="Create" class="btn btn-secondary">Create</a>
 </div>

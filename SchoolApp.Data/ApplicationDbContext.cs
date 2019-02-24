@@ -11,22 +11,34 @@
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Group> Groups { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Student> Students { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserGroup>()
-                .HasKey(k => new { k.UserId, k.GroupId });
+            modelBuilder.Entity<CourseStudents>()
+                .HasKey(k => new { k.StudentID, k.CourseID });
 
-            modelBuilder.Entity<UserGroup>()
-                .HasOne(u => u.User)
-                .WithMany(g => g.Groups);
+            modelBuilder.Entity<CourseStudents>()
+                .HasOne(u => u.Course)
+                .WithMany(g => g.Students)
+                .HasForeignKey(fk => fk.CourseID);
 
-            modelBuilder.Entity<UserGroup>()
-                .HasOne(g => g.Group)
-                .WithMany(u => u.Users); 
+            modelBuilder.Entity<CourseStudents>()
+                .HasOne(g => g.Student)
+                .WithMany(u => u.Courses)
+                .HasForeignKey(fk => fk.StudentID);
+
+
+            modelBuilder.Entity<Teacher>()
+                .HasMany(c => c.Courses)
+                .WithOne();
+
+            modelBuilder.Entity<Course>()
+                .HasOne(t => t.Teacher)
+                .WithMany(c => c.Courses);
         }
     }
 }

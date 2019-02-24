@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model CreateTeacherViewModel
 
 @{
     ViewData["Title"] = "Create new Teacher";
@@ -7,20 +7,27 @@
 <div class="col-3">
     <form asp-action="Create" asp-controller="Teacher" method="post">
         <div class="form-group ">
-            <label asp-for="FirstName"></label>
-            <input asp-for="FirstName" class="form-control" type="text" />
+            <label asp-for="Teacher.FirstName"></label>
+            <input asp-for="Teacher.FirstName" class="form-control" type="text" />
         </div>
         <div class="form-group ">
-            <label asp-for="MidName"></label>
-            <input asp-for="MidName" class="form-control" type="text" />
+            <label asp-for="Teacher.MidName"></label>
+            <input asp-for="Teacher.MidName" class="form-control" type="text" />
         </div>
         <div class="form-group ">
-            <label asp-for="LastName"></label>
-            <input asp-for="LastName" class="form-control" type="text" />
+            <label asp-for="Teacher.LastName"></label>
+            <input asp-for="Teacher.LastName" class="form-control" type="text" />
         </div>
-        <div class="form-group ">
-            <label asp-for="IsTeacher"></label>
-            <input asp-for="IsTeacher" class="form-check" type="checkbox" />
+        <div class="form-group">
+            @foreach (var course in Model.Courses)
+            {
+                <input type="checkbox" 
+                       name="selectedCourses" 
+                       value="@course.CourseID" />
+
+                       @course.Name
+                <br />
+            }
         </div>
         <button class="btn btn-primary" type="submit">Create</button>
         <a class="btn btn-danger" asp-action="Index">Cancel</a>

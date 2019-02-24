@@ -7,57 +7,64 @@ namespace SchoolApp.Web.Controllers
     using SchoolApp.Data.Repository;
     using SchoolApp.Models;
     using SchoolApp.Web.ViewModels;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     public class TeacherController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly ITeacherRepository _userRepository;
+        private readonly ICourseRepository _courseRepository;
         private readonly ApplicationDbContext _context;
 
-        public TeacherController(IUserRepository repository, ApplicationDbContext context)
+        public TeacherController(ITeacherRepository repository,
+            ICourseRepository courseRepository,
+            ApplicationDbContext context)
         {
             this._userRepository = repository;
+            this._courseRepository = courseRepository;
             this._context = context;
         }
         public IActionResult Index()
         {
+            AllTeachersViewModel viewModel = new AllTeachersViewModel();
+            viewModel.Teachers = _userRepository.GetAll(true);
+            viewModel.Courses = _courseRepository.GetAll(true);
 
-            List<User> teachers = _context.Users
-                .Include(g => g.Groups)
-                .ThenInclude(s => s.Group)
-                .ToList();
-            
-            //foreach (var user in teacherDb)
-            //{
-            //    teachers.Add(new User()
-            //    {
-            //         = user,
-            //        Groups = user.Groups
-            //    });
-            //}
-
-            return View(teachers);
+            return View(viewModel);
         }
 
         public IActionResult Create()
         {
-            return View();
+            CreateTeacherViewModel createTeacher = new CreateTeacherViewModel();
+            createTeacher.Teacher = new Teacher();
+            createTeacher.Courses = _courseRepository
+                .GetAll(true)
+                .Where(t => t.Teacher == null);
+
+            return View(createTeacher);
         }
 
         [HttpPost]
-        public IActionResult Create(User user)
+        public IActionResult Create(Teacher teacher, int[] selectedCourses)
         {
             if (ModelState.IsValid)
             {
-                _userRepository.Add(user);
-                ViewData["message"] = $"{user.FirstName} {user.LastName} successfuly created.";
+                var dbTeacher = teacher;
+                teacher.Courses = new HashSet<Course>();
+                foreach (var course in selectedCourses)
+                {
+                    teacher.Courses.Add(_userRepository.GetCourseById(course));
+                }
+                _userRepository.Add(teacher);
+
+                ViewData["message"] = $"{teacher.FirstName} {teacher.LastName} successfuly created.";
                 return RedirectToAction("Index");
             }
             else
             {
-                ViewData["errormessage"] = $"There was a problem creating {user.FirstName} {user.LastName}. Please try again.";
+                ViewData["errormessage"] = $"There was a problem creating {teacher.FirstName} {teacher.LastName}. Please try again.";
                 return View();
             }
         }
@@ -71,7 +78,7 @@ namespace SchoolApp.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(User user)
+        public IActionResult Edit(Teacher user)
         {
             if (ModelState.IsValid)
             {
@@ -95,17 +102,17 @@ namespace SchoolApp.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(User user)
+        public IActionResult Delete(Teacher teacher)
         {
             if (ModelState.IsValid)
             {
-                TempData["message"] = $"{user.FirstName} {user.LastName} has been deleted.";
-                _userRepository.Delete(user.UserId);
+                TempData["message"] = $"{teacher.FirstName} {teacher.LastName} has been deleted.";
+                _userRepository.Delete(teacher.ID);
                 return RedirectToAction("Index");
             }
             else
             {
-                TempData["message"] = $"There was a problem while trying to delete {user.FirstName} {user.LastName}. Please try again.";
+                TempData["message"] = $"There was a problem while trying to delete {teacher.FirstName} {teacher.LastName}. Please try again.";
 
                 return View();
             }
@@ -118,15 +125,16 @@ namespace SchoolApp.Web.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .Include(g => g.Groups)
-                .ThenInclude(s => s.Group)
-                .FirstOrDefaultAsync(u => u.UserId == id);
+            var user = await _context.Teachers
+                .Include(g => g.Courses)
+                .ThenInclude(s => s.Students)
+                .FirstOrDefaultAsync(u => u.ID == id);
 
             if (user == null)
             {
                 return NotFound();
             }
+
             return View(user);
         }
 
