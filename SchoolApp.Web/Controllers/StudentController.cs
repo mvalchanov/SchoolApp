@@ -29,5 +29,15 @@
             List<StudentViewModel> students = _mapper.Map<List<StudentViewModel>>(_userRepository.GetAll(true));
             return View(students);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        public IActionResult Edit()
+        {
+            return View();
+        }
     }
 }

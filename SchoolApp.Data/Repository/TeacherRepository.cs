@@ -12,6 +12,15 @@
         {
             this.context = ctx;
         }
+        public Course GetCourseById(int id)
+        {
+            var dbEntity = this.context.Courses
+                .Include(s => s.Students)
+                    .ThenInclude(st => st.Student)
+                .FirstOrDefault(e => e.CourseID == id);
+
+            return dbEntity;
+        }
 
         public Teacher GetById(int? id)
         {
@@ -26,11 +35,11 @@
             if (includeGroups)
             {
                 allUsers
-                    .Include(u => u.Courses).ToList();
+                    .Include(u => u.Courses)
+                    .ToList();
             }
             return allUsers.AsQueryable();
         }
-
         public void Add(Teacher entity)
         {
             this.context.Teachers.Add(entity);
@@ -49,15 +58,7 @@
             this.context.Update(teacher);
             this.context.SaveChanges();
         }
-        public Course GetCourseById(int id)
-        {
-            var dbEntity = this.context.Courses
-                .Include(s => s.Students)
-                    .ThenInclude(st => st.Student)
-                .FirstOrDefault(e => e.CourseID == id);
-
-            return dbEntity;
-        }
+        
     }
 
 }

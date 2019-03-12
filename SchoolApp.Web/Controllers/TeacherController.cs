@@ -59,12 +59,13 @@ namespace SchoolApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = _mapper.Map<Teacher>(teacher);
                 foreach (var course in selectedCourses)
                 {
-                    var cour = _mapper.Map<CourseViewModel>(_courseRepository.GetById(course));
-                    teacher.Courses.Add(cour);
+                    var cour = (_courseRepository.GetById(course));
+                    user.Courses.Add(cour);
                 }
-                _userRepository.Add(_mapper.Map<Teacher>(teacher));
+                _userRepository.Add(user);
 
                 ViewData["message"] = $"{teacher.FirstName} {teacher.LastName} successfuly created.";
                 return RedirectToAction("Index");
@@ -103,26 +104,36 @@ namespace SchoolApp.Web.Controllers
             {
                 var dbUser = _userRepository
                     .GetById(user.ID);
+                dbUser.Courses = _courseRepository.GetAll(true, true)
+                    .Where(c => c.TeacherID == dbUser.ID)
+                    .ToList();
 
-                user.Courses = new HashSet<CourseViewModel>();
-
-                user.Courses = _mapper.Map<ICollection<CourseViewModel>>(_userRepository
-                    .GetAll(true));
+                ////user.Courses = new HashSet<CourseViewModel>();
+                //user.Courses = _mapper.Map<ICollection<CourseViewModel>>(_courseRepository
+                //    .GetAll(true, true)
+                //    .Where(c=>c.TeacherID == user.ID));
                 if (deleteCourses.Any())
                 {
                     foreach (var course in deleteCourses)
                     {
-                        user.Courses.Remove(_mapper.Map<CourseViewModel>(_courseRepository
-                            .GetById(course)));
+                        dbUser.Courses.Remove(_courseRepository.GetById(course));
                     }
                 }
                 if (addCourses.Any())
                 {
                     foreach (var course in addCourses)
                     {
-                        user.Courses.Add(_mapper.Map<CourseViewModel>(_courseRepository
-                            .GetById(course)));
+                        dbUser.Courses.Add(_courseRepository.GetById(course));
                     }
+                    
+                }
+                try
+                {
+                    _userRepository.Edit(dbUser);
+                }
+                catch (Exception)
+                {
+
                 }
                 //_userRepository.Edit(user);
                 TempData["message"] = $"{user.FullName} has been edited.";
@@ -166,6 +177,13 @@ namespace SchoolApp.Web.Controllers
             {
                 return View();
             }
+        }
+
+        public IActionResult Details(int? id)
+        {
+            var teacher = _mapper.Map<TeacherViewModel>(_userRepository.GetById(id));
+
+            return View(teacher);
         }
     }
 }

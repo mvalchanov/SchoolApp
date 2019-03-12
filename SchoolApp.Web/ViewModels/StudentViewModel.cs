@@ -5,6 +5,10 @@
 
     public class StudentViewModel
     {
+        public StudentViewModel()
+        {
+            this.Courses = new HashSet<CourseStudentsViewModel>();
+        }
         public int ID { get; set; }
 
         [Required(ErrorMessage = "Please enter first name")]
@@ -20,11 +24,11 @@
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        public ICollection<CourseViewModel> Courses { get; set; }
+        public ICollection<CourseStudentsViewModel> Courses { get; set; }
 
         //public ICollection<SelectListItem> CourseCheckBoxes { get; set; }
 
-        //public ICollection<CourseViewModel> AllCourses { get; set; }
+        public ICollection<CourseViewModel> AllCourses { get; set; }
 
         public string FullName
         {

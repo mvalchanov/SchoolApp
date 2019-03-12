@@ -6,6 +6,10 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="Views\Student\Edit.cshtml" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
@@ -20,6 +24,21 @@
   <ItemGroup>
     <ProjectReference Include="..\SchoolApp.Data\SchoolApp.Data.csproj" />
     <ProjectReference Include="..\SchoolApp.Models\SchoolApp.Models.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Student\Edit.cshtml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Student\Edit.cshtml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="Views\Student\Edit.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -26,7 +26,9 @@
             if (includeGroups)
             {
                 allUsers
-                    .Include(u => u.Courses).ToList();
+                    .Include(u => u.Courses)
+                    .ThenInclude(c => c.Course)
+                    .ToList();
             }
             return allUsers.AsQueryable();
         }
@@ -46,8 +48,8 @@
 
         public void Edit(Student student)
         {
-
-            //this.context.SaveChanges();
+            this.context.Update(student);
+            this.context.SaveChanges();
         }
 
         public Student GetCourseById(int id)

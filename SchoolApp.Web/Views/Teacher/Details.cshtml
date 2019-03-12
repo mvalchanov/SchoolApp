@@ -1,6 +1,6 @@
-﻿@*@model User
+﻿@model TeacherViewModel
 @{
-    ViewData["Title"] = $"{Model.FullName}Details";
+    ViewData["Title"] = $"{Model.FullName} Details";
 }
 
 <table class="table table-hover text-center">
@@ -16,28 +16,28 @@
     </thead>
     <tbody>
         <tr>
-            <td>@Model.UserId</td>
+            <td>@Model.ID</td>
             <td>@Model.FirstName</td>
             <td>@Model.MidName</td>
             <td>@Model.LastName</td>
             <td>
-                @foreach (var group in Model.Groups)
+                @foreach (var course in Model.Courses)
                 {
-                    @group.Group.Name <br />
+                    @course.Name <br />
                 }
             </td>
         </tr>
     </tbody>
 </table>
 
-@foreach (var group in Model.Groups)
+@foreach (var course in Model.Courses)
 {
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
         <div class="card-header">Group:</div>
         <div class="card-body">
-            <h4 class="card-title">@group.Group.Name</h4>
-            <p class="card-text">Students in group: @group.Group.Users.Where(s => s.User.IsTeacher == false).Count()</p>
+            <h4 class="card-title">@course.Name</h4>
+            <p class="card-text">Students in group: @course.Students.Count()</p>
         </div>
     </div>
-}*@
+}
 

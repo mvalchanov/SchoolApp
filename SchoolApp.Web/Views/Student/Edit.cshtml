@@ -1,0 +1,67 @@
+﻿@model StudentViewModel
+
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<div class="">
+    <form class="row" asp-action="Edit" asp-controller="Teacher" method="post">
+        <div class="col-4">
+            <div class="form-group ">
+                <label asp-for="ID"></label>
+                <input asp-for="ID" class="form-control" id="readOnlyInput" readonly="" type="text" />
+            </div>
+            <div class="form-group ">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" type="text" />
+            </div>
+            <div class="form-group ">
+                <label asp-for="MidName"></label>
+                <input asp-for="MidName" class="form-control" type="text" />
+            </div>
+            <div class="form-group ">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" type="text" />
+            </div>
+            <div class="form-group ">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" type="text" />
+            </div>
+            <button class="btn btn-primary" type="submit">Edit</button>
+            <a class="btn btn-danger" asp-action="Index">Cancel</a>
+        </div>
+        <div class="col-4">
+            <div class="">
+                <p3>Participate in:</p3>
+                @foreach (var course in Model.Courses)
+                {
+                    <div class="card text-center">
+                        <input type="checkbox"
+                               name="deleteCourses"
+                               value="@course.CourseID" />
+
+                        @course.Name
+                        <br />
+                    </div>
+                }
+            </div>
+            <div>
+                <p3>Groups w/o assigned teacher:</p3>
+                @foreach (var course in Model.AllCourses)
+                {
+                    <div class="card text-center">
+                        <input type="checkbox"
+                               name="addCourses"
+                               value="@course.CourseID" />
+
+                        @course.Name
+                        <br />
+                    </div>
+                }
+            </div>
+        </div>
+
+    </form>
+
+
+</div>
