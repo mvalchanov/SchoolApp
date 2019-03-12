@@ -10,7 +10,5 @@
         void Add(Student entity);
         void Delete(int id);
         void Edit(Student entity);
-
-    
     }
 }

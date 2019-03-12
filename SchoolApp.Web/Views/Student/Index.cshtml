@@ -1,0 +1,46 @@
+﻿@model List<StudentViewModel>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<div class="container-fluid">
+    <h2>Students</h2>
+    <p>All Students:</p>
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.ID </td>
+                    <td>@student.FullName </td>
+                    <td>
+                        @if (student.Courses.Any())
+                        {
+                            @foreach (var course in student.Courses)
+                            {
+                                @course.Name <br />
+                            }
+                        }
+
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@student.ID" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@student.ID" class="btn btn-outline-danger">Delete</a>
+                        <a asp-action="Details" asp-route-id="@student.ID" class="btn btn-outline-info">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Create" class="btn btn-secondary">Create</a>
+</div>

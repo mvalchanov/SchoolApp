@@ -1,35 +1,76 @@
-﻿@model CreateTeacherViewModel
+﻿@model TeacherViewModel
 
 @{
     ViewData["Title"] = "Create new Teacher";
 }
 
+
+
+
 <div class="col-3">
     <form asp-action="Create" asp-controller="Teacher" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group ">
-            <label asp-for="Teacher.FirstName"></label>
-            <input asp-for="Teacher.FirstName" class="form-control" type="text" />
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" data-val="true" data-val-required="This Field is required" class="form-control" type="text" required/>
+            <div class="validation-summary-valid" data-valmsg-summary="true">
+                <ul><li style="display:none"></li></ul>
+            </div>
         </div>
         <div class="form-group ">
-            <label asp-for="Teacher.MidName"></label>
-            <input asp-for="Teacher.MidName" class="form-control" type="text" />
+            <label asp-for="MidName"></label>
+            <input asp-for="MidName" class="form-control" type="text" />
         </div>
         <div class="form-group ">
-            <label asp-for="Teacher.LastName"></label>
-            <input asp-for="Teacher.LastName" class="form-control" type="text" />
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" data-val="true" data-val-required="This Field is required" class="form-control" type="text" required />
+            <div class="validation-summary-valid" data-valmsg-summary="true">
+                <ul><li style="display:none"></li></ul>
+            </div>
         </div>
+        <div class="form-group ">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" data-val="true" data-val-required="This Field is required" class="form-control" type="text" required />
+            <div class="validation-summary-valid" data-valmsg-summary="true">
+                <ul><li style="display:none"></li></ul>
+            </div>
+        </div>
+
+        <p3>Select course/s:</p3>
         <div class="form-group">
+            @*<select asp-items="Model.CourseCheckBoxes"></select>*@
+
             @foreach (var course in Model.Courses)
             {
-                <input type="checkbox" 
-                       name="selectedCourses" 
-                       value="@course.CourseID" />
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox"
+                                   name="selectedCourses"
+                                   value="@course.CourseID" />
+                        </div>
+                    </div>
+                    <input for="@course.Name" class="form-control" id="readOnlyInput" readonly="" type="text" value="@course.Name" />
+                </div>
 
-                       @course.Name
-                <br />
+                @*<input type="checkbox"
+                           name="selectedCourses"
+                           value="@course.CourseID" />
+
+                    @course.Name
+                    <br />*@
             }
         </div>
         <button class="btn btn-primary" type="submit">Create</button>
         <a class="btn btn-danger" asp-action="Index">Cancel</a>
     </form>
 </div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("form").validate();
+        });
+    </script>
+}

@@ -13,9 +13,9 @@ namespace SchoolApp.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
                     MidName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true)
                 },
@@ -30,9 +30,9 @@ namespace SchoolApp.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
                     MidName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true)
                 },
@@ -48,7 +48,7 @@ namespace SchoolApp.Data.Migrations
                     CourseID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    TeacherID = table.Column<int>(nullable: true)
+                    TeacherID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,7 +58,7 @@ namespace SchoolApp.Data.Migrations
                         column: x => x.TeacherID,
                         principalTable: "Teachers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

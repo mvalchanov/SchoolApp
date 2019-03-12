@@ -13,7 +13,7 @@
             this.context = ctx;
         }
 
-        public Teacher GetById(int id)
+        public Teacher GetById(int? id)
         {
             var users = context.Teachers.Include(u => u.Courses);
             var user = users.FirstOrDefault(u => u.ID == id);
@@ -37,7 +37,7 @@
             this.context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(int? id)
         {
             var dbEntry = this.context.Teachers.FirstOrDefault(e => e.ID == id);
             this.context.Remove(dbEntry);
@@ -46,16 +46,7 @@
 
         public void Edit(Teacher teacher)
         {
-            var dbUser = this.context.Teachers.FirstOrDefault(u => u.ID == teacher.ID);
-            if (dbUser != null)
-            {
-                dbUser.FirstName = teacher.FirstName;
-                dbUser.MidName = teacher.MidName;
-                dbUser.LastName = teacher.LastName;
-                dbUser.Email = teacher.Email;
-                dbUser.Courses = teacher.Courses;
-            }
-
+            this.context.Update(teacher);
             this.context.SaveChanges();
         }
         public Course GetCourseById(int id)

@@ -38,14 +38,20 @@
             }
         }
 
-        public IQueryable<Course> GetAll(bool includeUsers)
+        public IQueryable<Course> GetAll(bool includeStudents, bool includeTeacher)
         {
             var allcourses = this.context.Courses;
-            if (includeUsers)
+            if (includeStudents)
             {
-                allcourses.Include(u => u.Students)
-                    .ThenInclude(s => s.Student)
+                allcourses
+                    .Include(u => u.Students)
+                        .ThenInclude(s => s.Student)
                     .ToList();
+            }
+            if (includeTeacher)
+            {
+                allcourses
+                    .Include(t => t.Teacher);
             }
             return allcourses.AsQueryable();
         }

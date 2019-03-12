@@ -1,4 +1,4 @@
-﻿@model AllTeachersViewModel
+﻿@model List<TeacherViewModel>
 @{
     ViewData["Title"] = "Login";
 }
@@ -34,7 +34,7 @@
         </thead>
         <tbody>
 
-            @foreach (var teacher in Model.Teachers)
+            @foreach (var teacher in Model)
             {
                 <tr>
                     <td>@teacher.ID </td>
@@ -59,7 +59,7 @@
     <a asp-action="Create" class="btn btn-secondary">Create</a>
 </div>
 
-<div class="container-fluid">
+@*<div class="container-fluid">
     <h2>Courses</h2>
     <p>All courses:</p>
     <table class="table table-hover text-center">
@@ -73,28 +73,28 @@
         </thead>
         <tbody>
 
-            @foreach (var course in Model.Courses)
+            foreach (var course in model.courses)
             {
                 <tr>
-                    <td>@course.CourseID </td>
-                    <td>@course.Name </td>
-                    <td>@course.Teacher.FullName </td>
+                    <td>@course.courseid </td>
+                    <td>@course.name </td>
+                    <td>@course.teacher </td>
                     <td>
-                        @foreach (var student in course.Students)
+                        foreach (var student in course.students)
                         {
-                            @student.Student.FullName <br />
+                            @student.student.fullname <br />
                         }
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@course.CourseID" class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@course.CourseID" class="btn btn-outline-danger">Delete</a>
-                        <a asp-action="Details" asp-route-id="@course.CourseID" class="btn btn-outline-info">Details</a>
+                        <a asp-action="edit" asp-route-id="@course.courseid" class="btn btn-primary">edit</a>
+                        <a asp-action="delete" asp-route-id="@course.courseid" class="btn btn-outline-danger">delete</a>
+                        <a asp-action="details" asp-route-id="@course.courseid" class="btn btn-outline-info">details</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>>
+</div>>*@
 
 
 

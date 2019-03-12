@@ -46,16 +46,8 @@
 
         public void Edit(Student student)
         {
-            var dbUser = this.context.Students.FirstOrDefault(u => u.ID == student.ID);
-            if (dbUser != null)
-            {
-                dbUser.FirstName = student.FirstName;
-                dbUser.MidName = student.MidName;
-                dbUser.LastName = student.LastName;
-                dbUser.Email = student.Email;
-                dbUser.Courses = student.Courses;
-            }
-            this.context.SaveChanges();
+
+            //this.context.SaveChanges();
         }
 
         public Student GetCourseById(int id)

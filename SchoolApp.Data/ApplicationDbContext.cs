@@ -31,14 +31,17 @@
                 .WithMany(u => u.Courses)
                 .HasForeignKey(fk => fk.StudentID);
 
-
             modelBuilder.Entity<Teacher>()
                 .HasMany(c => c.Courses)
-                .WithOne();
+                .WithOne()
+            //.IsRequired();
+            .OnDelete(DeleteBehavior.SetNull);
+
 
             modelBuilder.Entity<Course>()
                 .HasOne(t => t.Teacher)
                 .WithMany(c => c.Courses);
+            //.OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

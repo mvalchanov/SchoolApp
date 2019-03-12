@@ -1,0 +1,58 @@
+﻿@model List<CourseViewModel>
+
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<div class="container-fluid">
+    <h2>Courses</h2>
+    <p>All Courses:</p>
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Teacher</th>
+                <th>Students</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@course.CourseID </td>
+                    <td>@course.Name </td>
+                    @if (course.Teacher != null)
+                    {
+                        <td>
+                            @course.Teacher.FullName;
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            Not Assigned
+                        </td>
+                    }
+                    <td>
+                        @if (course.Students.Any())
+                        {
+                            @foreach (var student in course.Students)
+                            {
+                                @student.FullName <br />
+                            }
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@course.CourseID" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@course.CourseID" class="btn btn-outline-danger">Delete</a>
+                        <a asp-action="Details" asp-route-id="@course.CourseID" class="btn btn-outline-info">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Create" class="btn btn-secondary">Create</a>
+</div>

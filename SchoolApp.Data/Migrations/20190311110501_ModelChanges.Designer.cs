@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolApp.Data;
 
 namespace SchoolApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190311110501_ModelChanges")]
+    partial class ModelChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,7 +29,8 @@ namespace SchoolApp.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("TeacherID");
+                    b.Property<int?>("TeacherID")
+                        .IsRequired();
 
                     b.HasKey("CourseID");
 
@@ -55,14 +58,11 @@ namespace SchoolApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Email")
-                        .IsRequired();
+                    b.Property<string>("Email");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
+                    b.Property<string>("LastName");
 
                     b.Property<string>("MidName");
 
@@ -79,14 +79,11 @@ namespace SchoolApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Email")
-                        .IsRequired();
+                    b.Property<string>("Email");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
+                    b.Property<string>("LastName");
 
                     b.Property<string>("MidName");
 
@@ -102,7 +99,7 @@ namespace SchoolApp.Data.Migrations
                     b.HasOne("SchoolApp.Models.Teacher", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherID")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SchoolApp.Models.CourseStudents", b =>
