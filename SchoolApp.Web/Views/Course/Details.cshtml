@@ -1,0 +1,45 @@
+﻿@model CourseViewModel
+@{
+    ViewData["Title"] = $"{Model.Name} Details";
+}
+
+<table class="table table-hover text-center">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Course Name</th>
+            <th>Teacher</th>
+            <th>Students</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.CourseID</td>
+            <td>@Model.Name</td>
+            @if (Model.Teacher != null)
+            {
+                <td>
+                    @Model.Teacher.FullName
+                </td>
+            }
+            else
+            {
+                <td>
+                    Not Assigned
+                </td>
+            }
+            <td>
+                @foreach (var student in Model.Students)
+                {
+                    @student.Student.FullName <br />
+                }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@Model.CourseID" class="btn btn-primary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.CourseID" class="btn btn-outline-danger">Delete</a>
+                <a asp-action="Index" asp-route-id="@Model.CourseID" class="btn btn-outline-info">Back</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

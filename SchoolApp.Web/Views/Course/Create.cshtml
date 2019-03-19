@@ -1,0 +1,29 @@
+﻿@model CourseViewModel
+
+@{
+    ViewData["Title"] = "Create new Course";
+}
+
+<div class="col-3">
+    <form asp-action="Create" asp-controller="Course" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group ">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" data-val="true" data-val-required="This Field is required" class="form-control" type="text" required/>
+            <div class="validation-summary-valid" data-valmsg-summary="true">
+                <ul><li style="display:none"></li></ul>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Create</button>
+        <a class="btn btn-danger" asp-action="Index">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("form").validate();
+        });
+    </script>
+}

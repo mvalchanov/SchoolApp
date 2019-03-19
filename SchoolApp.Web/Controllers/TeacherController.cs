@@ -27,21 +27,24 @@ namespace SchoolApp.Web.Controllers
 
         public IActionResult Index()
         {
-            List<TeacherViewModel> viewModel = _mapper.Map<List<TeacherViewModel>>(_userRepository.GetAll(true));
+            List<TeacherViewModel> viewModel = _mapper.Map<List<TeacherViewModel>>(_userRepository
+                .GetAll(includeCourses: true));
 
             return View(viewModel);
         }
 
         public IActionResult Create()
         {
-            TeacherViewModel createTeacher = new TeacherViewModel
+            TeacherViewModel teacher = new TeacherViewModel
             {
-                Courses = _mapper.Map<ICollection<CourseViewModel>>(_courseRepository
-                .GetAll(true, true)
-                .Where(t => t.Teacher == null))
+                Courses = _mapper
+                    .Map<ICollection<CourseViewModel>>(_courseRepository
+                        .GetAll(includeStudents: true, includeTeacher: true)
+                        .Where(t => t.Teacher == null))
+                        
             };
 
-            //createTeacher.CourseCheckBoxes = _courseRepository
+            //teacher.CourseCheckBoxes = _courseRepository
             //    .GetAll(true)
             //    .Where(t => t.Teacher == null)
             //    .Select(c => new SelectListItem
@@ -51,138 +54,116 @@ namespace SchoolApp.Web.Controllers
             //    })
             //    .ToList();
 
-            return View(createTeacher);
+            return View(teacher);
         }
 
         [HttpPost]
-        public IActionResult Create(TeacherViewModel teacher, int[] selectedCourses)
+        public IActionResult Create(TeacherViewModel viewTeacher, int[] selectedCourses)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = _mapper.Map<Teacher>(teacher);
-                foreach (var course in selectedCourses)
-                {
-                    var cour = (_courseRepository.GetById(course));
-                    user.Courses.Add(cour);
-                }
-                _userRepository.Add(user);
+                ViewData["error"] = $"There was a problem creating {viewTeacher.FullName}. Please try again.";
+                return View(nameof(Create), viewTeacher);
+            }
 
-                ViewData["message"] = $"{teacher.FirstName} {teacher.LastName} successfuly created.";
-                return RedirectToAction("Index");
-            }
-            else
+            Teacher teacher = _mapper.Map<Teacher>(viewTeacher);
+
+            foreach (var course in selectedCourses)
             {
-                ViewData["errormessage"] = $"There was a problem creating {teacher.FirstName} {teacher.LastName}. Please try again.";
-                return View();
+                var crs = (_courseRepository.GetById(course));
+                teacher.Courses.Add(crs);
             }
+
+            _userRepository.Add(teacher);
+            _userRepository.Save();
+
+            ViewData["success"] = $"{viewTeacher.FullName} successfuly created.";
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             TeacherViewModel teacher = _mapper.Map<TeacherViewModel>(_userRepository
-                .GetById(id));
+                .GetById(id, includeCourses: true));
+
             teacher.AllCourses = _mapper.Map<ICollection<CourseViewModel>>(_courseRepository
-                .GetAll(true, true)
+                .GetAll(includeStudents: true,includeTeacher: true)
                 .Where(t => t.Teacher == null));
 
             return View(teacher);
         }
 
         [HttpPost]
-        public IActionResult Edit(TeacherViewModel user, int[] addCourses, int[] deleteCourses)
+        public IActionResult Edit(TeacherViewModel viewTeacher, int[] addCourses, int[] deleteCourses)
         {
             if (!ModelState.IsValid)
             {
-                return View(user);
+                TempData["error"] = $"There was a problem editing {viewTeacher.FullName}. Please try again.";
+                return View("Edit", viewTeacher);
             }
-            if (ModelState.IsValid)
-            {
-                var dbUser = _userRepository
-                    .GetById(user.ID);
-                dbUser.Courses = _courseRepository.GetAll(true, true)
-                    .Where(c => c.TeacherID == dbUser.ID)
-                    .ToList();
 
-                ////user.Courses = new HashSet<CourseViewModel>();
-                //user.Courses = _mapper.Map<ICollection<CourseViewModel>>(_courseRepository
-                //    .GetAll(true, true)
-                //    .Where(c=>c.TeacherID == user.ID));
-                if (deleteCourses.Any())
-                {
-                    foreach (var course in deleteCourses)
-                    {
-                        dbUser.Courses.Remove(_courseRepository.GetById(course));
-                    }
-                }
-                if (addCourses.Any())
-                {
-                    foreach (var course in addCourses)
-                    {
-                        dbUser.Courses.Add(_courseRepository.GetById(course));
-                    }
-                    
-                }
-                try
-                {
-                    _userRepository.Edit(dbUser);
-                }
-                catch (Exception)
-                {
 
-                }
-                //_userRepository.Edit(user);
-                TempData["message"] = $"{user.FullName} has been edited.";
-                return RedirectToAction("Index");
-            }
-            else
+            Teacher teacher = _mapper.Map<Teacher>(viewTeacher);
+
+            _userRepository.Edit(teacher);
+            _userRepository.Save();
+
+            teacher = _userRepository
+                .GetById(viewTeacher.ID, includeCourses: true);
+
+            if (deleteCourses.Any())
             {
-                TempData["errormessage"] = $"There was a problem editing {user.FullName}. Please try again.";
-                return View("Edit", user);
+                foreach (var course in deleteCourses)
+                {
+                    teacher.Courses.Remove(_courseRepository.GetById(course));
+                }
             }
+
+            if (addCourses.Any())
+            {
+                foreach (var course in addCourses)
+                {
+                    teacher.Courses.Add(_courseRepository.GetById(course));
+                }
+            }
+
+            _userRepository.Edit(teacher);
+            _userRepository.Save();
+
+            TempData["success"] = $"{viewTeacher.FullName} has been edited.";
+            return RedirectToAction(nameof(Index));
+
         }
 
         public IActionResult Delete(int id)
         {
+            TeacherViewModel teacher = _mapper.Map<TeacherViewModel>(_userRepository
+                .GetById(id, includeCourses: true));
 
-            TeacherViewModel user = _mapper.Map<TeacherViewModel>(_userRepository
-                .GetById(id));
-
-            return View(user);
+            return View(teacher);
         }
 
         [HttpPost]
         public IActionResult Delete(TeacherViewModel teacher)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _userRepository.Delete(teacher.ID);
-                }
-                catch (Exception)
-                {
-                    TempData["errorMessage"] = $"There was a problem while trying to delete {teacher.FullName}. Please try again.";
-
-                    return View();
-                }
-                TempData["message"] = $"{teacher.FullName} has been deleted.";
-                return RedirectToAction("Index");
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 return View();
             }
+
+            _userRepository.Delete(teacher.ID);
+            _userRepository.Save();
+
+            TempData["success"] = $"{teacher.FullName} has been deleted.";
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Details(int id)
         {
-            var teacher = _mapper.Map<TeacherViewModel>(_userRepository.GetById(id));
-
+            TeacherViewModel teacher = _mapper.Map<TeacherViewModel>(_userRepository
+                .GetById(id, includeCourses: true));
+            
             return View(teacher);
         }
     }

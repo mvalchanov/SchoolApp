@@ -1,4 +1,4 @@
-﻿@model TeacherViewModel
+﻿@model StudentViewModel
 @{
     ViewData["Title"] = $"{Model.FullName} Details";
 }
@@ -23,7 +23,7 @@
             <td>
                 @foreach (var course in Model.Courses)
                 {
-                    @course.Name <br />
+                    @course.Course.Name <br />
                 }
             </td>
             <td>
@@ -40,8 +40,8 @@
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
         <div class="card-header">Group:</div>
         <div class="card-body">
-            <h4 class="card-title">@course.Name</h4>
-            <p class="card-text">Students in group: @course.Students.Count()</p>
+            <h4 class="card-title">@course.Course.Name</h4>
+            <p class="card-text">Students in group: @course.Course.Students.Count()</p>
         </div>
     </div>
 }

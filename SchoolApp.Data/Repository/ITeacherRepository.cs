@@ -5,13 +5,14 @@
 
     public interface ITeacherRepository
     {
-        Teacher GetById(int? id);
-        IQueryable<Teacher> GetAll(bool include);
-        void Add(Teacher entity);
-        void Delete(int? id);
-        void Edit(Teacher entity);
-        Course GetCourseById(int id);
+        Teacher GetById(int id, bool includeCourses = false);
+        IQueryable<Teacher> GetAll(bool includeCourses = false);
+        Course GetCourseById(int id, bool includeStudents = false);
 
-    
+
+        void Add(Teacher entity);
+        void Delete(int id);
+        void Edit(Teacher entity);
+        void Save();
     }
 }

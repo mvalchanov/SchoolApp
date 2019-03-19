@@ -1,0 +1,64 @@
+﻿@model CourseViewModel
+
+@{
+    ViewData["Title"] = "Model.Name";
+}
+
+<div class="">
+
+    <form asp-action="Delete" asp-controller="Course" method="post" class="row">
+        <div class="col-4">
+            <div class="form-group ">
+                <label asp-for="CourseID"></label>
+                <input asp-for="CourseID" class="form-control" id="readOnlyInput" readonly="" type="text" />
+            </div>
+            <div class="form-group ">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" type="text" readonly="" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">Confirm</button>
+            <a class="btn btn-danger" asp-action="Index">Cancel</a>
+        </div>
+
+        <div class="col-4">
+            <p2>Students:</p2>
+            @if (Model.Students.Any())
+            {
+                @foreach (var student in Model.Students)
+                {
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox"
+                                       checked=""
+                                       disabled=""
+                                       name="selectedCourses"
+                                       value="@student.StudentID" />
+                            </div>
+                        </div>
+                        <input for="@student.Student.FullName" class="form-control" id="readOnlyInput" readonly="" type="text" value="@student.Student.FullName" />
+                    </div>
+                }
+            }
+            <p2>Teacher:</p2>
+            @if (Model.Teacher != null)
+            {
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox"
+                                   checked=""
+                                   disabled=""
+                                   name="selectedCourses"
+                                   value="@Model.TeacherID" />
+                        </div>
+                    </div>
+                    <input for="@Model.Teacher.FullName" class="form-control" id="readOnlyInput" readonly="" type="text" value="@Model.Teacher.FullName" />
+                </div>
+            }
+
+        </div>
+    </form>
+</div>

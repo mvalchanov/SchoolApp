@@ -4,67 +4,84 @@
     using SchoolApp.Models;
     using System.Linq;
 
-
     public class CourseRepository : ICourseRepository
     {
+        private readonly ApplicationDbContext context;
+
         public CourseRepository(ApplicationDbContext ctx)
         {
             this.context = ctx;
         }
-        private ApplicationDbContext context { get; set; }
 
-
-        public void Add(Course course)
+        public IQueryable<Course> GetAll(bool includeStudents = false, bool includeTeacher = false)
         {
-            this.context.Courses.Add(course);
-            this.context.SaveChanges();
-        }
-
-        public void Delete(int id)
-        {
-            var dbEntity = this.context.Courses.FirstOrDefault(u => u.CourseID == id);
-            this.context.Courses.Remove(dbEntity);
-            this.context.SaveChanges();
-
-        }
-
-        public void Edit(Course course)
-        {
-            var dbEntity = this.context.Courses.FirstOrDefault(e => e.CourseID == course.CourseID);
-            if (dbEntity != null)
-            {
-                dbEntity.Name = course.Name;
-                dbEntity.Students = course.Students;
-            }
-        }
-
-        public IQueryable<Course> GetAll(bool includeStudents, bool includeTeacher)
-        {
-            var allcourses = this.context.Courses;
+            DbSet<Course> courses = this.context.Courses;
             if (includeStudents)
             {
-                allcourses
+                courses
                     .Include(u => u.Students)
                         .ThenInclude(s => s.Student)
                     .ToList();
             }
             if (includeTeacher)
             {
-                allcourses
-                    .Include(t => t.Teacher);
+                courses
+                    .Include(t => t.Teacher)
+                    .ToList();
             }
-            return allcourses.AsQueryable();
+            return courses.AsQueryable();
         }
 
-        public Course GetById(int id)
+        public Course GetById(int id, bool includeStudents = false, bool includeTeacher = false)
         {
-            var dbEntity = this.context.Courses
-                .Include(s => s.Students)
-                    .ThenInclude(st => st.Student)
-                .Include(t => t.Teacher)
-                .FirstOrDefault(e => e.CourseID == id);
+            DbSet<Course> courses = this.context.Courses;
 
-            return dbEntity;
+            if (includeStudents)
+            {
+                courses
+                    .Include(x => x.Students)
+                        .ThenInclude(x => x.Student)
+                    .ToList();
+            }
+
+            if (includeTeacher)
+            {
+                courses
+                    .Include(x => x.Teacher)
+                    .ToList();
+            }
+
+            return courses.FirstOrDefault(x => x.CourseID == id);
+        }
+
+        public void Add(Course course)
+        {
+            this.context.Courses.Add(course);
+        }
+
+        public void Delete(int id)
+        {
+            Course course = this.context.Courses
+                .FirstOrDefault(u => u.CourseID == id);
+
+            this.context.Courses.Remove(course);
+        }
+
+        public void Edit(Course course)
+        {
+            Course crs = this.context.Courses
+                .FirstOrDefault(e => e.CourseID == course.CourseID);
+
+            if (crs != null)
+            {
+                crs.Name = course.Name;
+                crs.Students = course.Students;
+            }
+        }
+
+        public void Save()
+        {
+            this.context.SaveChanges();
         }
     }
 }

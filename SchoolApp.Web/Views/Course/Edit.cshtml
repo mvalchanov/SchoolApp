@@ -21,7 +21,20 @@
         <div class="col-4">
             <div class="">
                 <p3>Teacher:</p3>
-
+                <div class="card text-center">
+                    @if (Model.Teacher != null)
+                    {
+                        <p2>
+                            @Model.Teacher.FullName
+                        </p2>
+                    }
+                    else
+                    {
+                        <p2>
+                            Not Assigned
+                        </p2>
+                    }
+                </div>
             </div>
             <div class="">
                 <p3>Students assigned in:</p3>
@@ -52,8 +65,5 @@
                 }
             </div>
         </div>
-
     </form>
-
-
 </div>

@@ -5,7 +5,7 @@
 }
 
 <div class="">
-    <form class="row" asp-action="Edit" asp-controller="Teacher" method="post">
+    <form class="row" asp-action="Edit" asp-controller="Student" method="post">
         <div class="col-4">
             <div class="form-group ">
                 <label asp-for="ID"></label>
@@ -40,13 +40,13 @@
                                name="deleteCourses"
                                value="@course.CourseID" />
 
-                        @course.Name
+                        @course.Course.Name
                         <br />
                     </div>
                 }
             </div>
             <div>
-                <p3>Groups w/o assigned teacher:</p3>
+                <p3>Not assigned in:</p3>
                 @foreach (var course in Model.AllCourses)
                 {
                     <div class="card text-center">

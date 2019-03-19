@@ -13,49 +13,61 @@
             this.context = ctx;
         }
 
-        public Student GetById(int id)
+        public Student GetById(int id, bool includeCourses = false)
         {
-            var users = context.Students.Include(u => u.Courses);
-            var user = users.FirstOrDefault(u => u.ID == id);
-            return user;
+            DbSet<Student> students = context.Students;
+
+            if (includeCourses)
+            {
+                students
+                    .Include(u => u.Courses)
+                        .ThenInclude(c => c.Course)
+                    .ToList();
+            }
+
+            return students.FirstOrDefault(u => u.ID == id);
         }
 
         public IQueryable<Student> GetAll(bool includeGroups = false)
         {
-            var allUsers = context.Students;
+            DbSet<Student> students = context.Students;
             if (includeGroups)
             {
-                allUsers
+                students
                     .Include(u => u.Courses)
-                    .ThenInclude(c => c.Course)
+                        .ThenInclude(c => c.Course)
                     .ToList();
             }
-            return allUsers.AsQueryable();
-        }
-
-        public void Add(Student entity)
-        {
-            this.context.Students.Add(entity);
-            this.context.SaveChanges();
-        }
-
-        public void Delete(int id)
-        {
-            var dbEntry = this.context.Students.FirstOrDefault(e => e.ID == id);
-            this.context.Remove(dbEntry);
-            this.context.SaveChanges();
-        }
-
-        public void Edit(Student student)
-        {
-            this.context.Update(student);
-            this.context.SaveChanges();
+            return students.AsQueryable();
         }
 
         public Student GetCourseById(int id)
         {
             //TODO
             throw new System.NotImplementedException();
+        }
+
+        public void Add(Student student)
+        {
+            this.context.Students.Add(student);
+        }
+
+        public void Delete(int id)
+        {
+            Student student = this.context.Students
+                .FirstOrDefault(e => e.ID == id);
+
+            this.context.Remove(student);
+        }
+
+        public void Edit(Student student)
+        {
+            this.context.Update(student);
+        }
+
+        public void Save()
+        {
+            this.context.SaveChanges();
         }
     }
 }

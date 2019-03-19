@@ -62,20 +62,8 @@
             navigation menu
         </div>
         <div class="col-11">
-            @if (TempData["message"] != null)
-            {
-                <div class="alert alert-dismissible alert-success">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>@TempData["message"]</strong>
-                </div>
-            }
-            @if (TempData["errorMessage"] != null)
-            {
-                <div class="alert alert-dismissible alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>@TempData["errorMessage"]</strong>
-                </div>
-            }
+            
+            @await Html.PartialAsync("_Toastr")
             @RenderBody()
         </div>
     </div>

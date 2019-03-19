@@ -12,53 +12,69 @@
         {
             this.context = ctx;
         }
-        public Course GetCourseById(int id)
-        {
-            var dbEntity = this.context.Courses
-                .Include(s => s.Students)
-                    .ThenInclude(st => st.Student)
-                .FirstOrDefault(e => e.CourseID == id);
 
-            return dbEntity;
-        }
-
-        public Teacher GetById(int? id)
+        public Course GetCourseById(int id, bool includeStudents = false)
         {
-            var users = context.Teachers.Include(u => u.Courses);
-            var user = users.FirstOrDefault(u => u.ID == id);
-            return user;
-        }
+            DbSet<Course> dbEntity = this.context.Courses;
 
-        public IQueryable<Teacher> GetAll(bool includeGroups = false)
-        {
-            var allUsers = context.Teachers;
-            if (includeGroups)
+            if (includeStudents)
             {
-                allUsers
+                dbEntity
+                    .Include(s => s.Students)
+                        .ThenInclude(st => st.Student)
+                    .ToList();
+            }
+
+            return dbEntity.FirstOrDefault(e => e.CourseID == id);
+        }
+
+        public Teacher GetById(int id, bool includeCourses = false)
+        {
+            DbSet<Teacher> teachers = context.Teachers;
+            if (includeCourses)
+            {
+                teachers
+                    .Include(u => u.Courses)
+                        .ThenInclude(s=>s.Students)
+                    .ToList();
+            }
+
+            return teachers.FirstOrDefault(x=>x.ID == id);
+        }
+
+        public IQueryable<Teacher> GetAll(bool includeCourses = false)
+        {
+            DbSet<Teacher> allTeachers = context.Teachers;
+            if (includeCourses)
+            {
+                allTeachers
                     .Include(u => u.Courses)
                     .ToList();
             }
-            return allUsers.AsQueryable();
-        }
-        public void Add(Teacher entity)
-        {
-            this.context.Teachers.Add(entity);
-            this.context.SaveChanges();
+            return allTeachers.AsQueryable();
         }
 
-        public void Delete(int? id)
+        public void Add(Teacher teacher)
         {
-            var dbEntry = this.context.Teachers.FirstOrDefault(e => e.ID == id);
-            this.context.Remove(dbEntry);
-            this.context.SaveChanges();
+            this.context.Teachers.Add(teacher);
+        }
+
+        public void Delete(int id)
+        {
+            Teacher teacher = this.context.Teachers
+                .FirstOrDefault(e => e.ID == id);
+
+            this.context.Remove(teacher);
         }
 
         public void Edit(Teacher teacher)
         {
             this.context.Update(teacher);
+        }
+
+        public void Save()
+        {
             this.context.SaveChanges();
         }
-        
     }
-
 }

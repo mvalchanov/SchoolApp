@@ -152,7 +152,6 @@
                     catch (Exception e)
                     {
                     }
-
                 }
                 context.SaveChanges();
             }
