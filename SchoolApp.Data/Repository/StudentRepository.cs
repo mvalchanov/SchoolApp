@@ -15,17 +15,18 @@
 
         public Student GetById(int id, bool includeCourses = false)
         {
-            DbSet<Student> students = context.Students;
+            //DbSet<Student> students = context.Students;
 
-            if (includeCourses)
-            {
-                students
-                    .Include(u => u.Courses)
-                        .ThenInclude(c => c.Course)
-                    .ToList();
-            }
+            //if (includeCourses)
+            //{
+            //    students
+            //        .Include(u => u.Courses)
+            //            .ThenInclude(c => c.Course)
+            //        .ToList();
+            //}
 
-            return students.FirstOrDefault(u => u.ID == id);
+            //return students.FirstOrDefault(u => u.ID == id);
+            return null;
         }
 
         public IQueryable<Student> GetAll(bool includeGroups = false)
@@ -54,10 +55,10 @@
 
         public void Delete(int id)
         {
-            Student student = this.context.Students
-                .FirstOrDefault(e => e.ID == id);
+            //Student student = this.context.Students
+            //    .FirstOrDefault(e => e.ID == id);
 
-            this.context.Remove(student);
+            //this.context.Remove(student);
         }
 
         public void Edit(Student student)

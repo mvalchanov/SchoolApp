@@ -18,7 +18,7 @@ namespace SchoolApp.Web
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
-                    SeedData.Seed(context);
+                    //SeedData.Seed(context);
                 }
                 catch (Exception ex)
                 {

@@ -4,6 +4,9 @@
     ViewData["Title"] = "Students";
 }
 
+@section Styles {
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+}
 <div class="container-fluid">
     <h2>Students</h2>
     <p>All Students:</p>
@@ -44,3 +47,12 @@
     </table>
     <a asp-action="Create" class="btn btn-secondary">Create</a>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#student-table").DataTable();
+        });
+    </script>
+}

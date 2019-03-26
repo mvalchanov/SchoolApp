@@ -1,22 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolApp.Models
 {
-    public class Person 
+    public class Person : IdentityUser
     {
-        public int ID { get; set; }
+        public Person()
+        {
 
-        [Required]
-        public string FirstName { get; set; }
+        }
+        public Person(bool isStudent = false, bool isTeacher = false)
+        {
+            if (isTeacher)
+            {
+                this.Teacher = new Teacher();
+            }
+            if (isStudent)
+            {
+                this.Student = new Student();
+            }
+        }
 
-        public string MidName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
-
-        [Required]
-        public string Email { get; set; }
-
-        public string Password { get; set; }
+        public int TeacherID { get; set; }
+        public virtual Teacher Teacher { get; set; }
+        public int StudentID { get; set; }
+        public virtual Student Student { get; set; } 
     }
 }

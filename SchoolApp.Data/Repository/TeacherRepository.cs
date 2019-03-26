@@ -30,16 +30,17 @@
 
         public Teacher GetById(int id, bool includeCourses = false)
         {
-            DbSet<Teacher> teachers = context.Teachers;
-            if (includeCourses)
-            {
-                teachers
-                    .Include(u => u.Courses)
-                        .ThenInclude(s=>s.Students)
-                    .ToList();
-            }
+            //DbSet<Teacher> teachers = context.Teachers;
+            //if (includeCourses)
+            //{
+            //    teachers
+            //        .Include(u => u.Courses)
+            //            .ThenInclude(s=>s.Students)
+            //        .ToList();
+            //}
 
-            return teachers.FirstOrDefault(x=>x.ID == id);
+            //return teachers.FirstOrDefault(x=>x.ID == id);
+            return null;
         }
 
         public IQueryable<Teacher> GetAll(bool includeCourses = false)
@@ -61,10 +62,10 @@
 
         public void Delete(int id)
         {
-            Teacher teacher = this.context.Teachers
-                .FirstOrDefault(e => e.ID == id);
+            //Teacher teacher = this.context.Teachers
+            //    .FirstOrDefault(e => e.ID == id);
 
-            this.context.Remove(teacher);
+            //this.context.Remove(teacher);
         }
 
         public void Edit(Teacher teacher)
